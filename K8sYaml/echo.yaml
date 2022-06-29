@@ -1,45 +1,36 @@
-kind: Cluster
+
+apiVersion: v1
+kind: Service
 metadata:
-  name: aws-cluster-1
-  project: aws
+  name: echo
 spec:
-  blueprint: default
-  cloudprovider: dev2-cloud-credential
-  cniprovider: aws-cni
-  proxyconfig: {}
-  type: eks
+  ports:
+  - port: 80
+    targetPort: 5678
+  selector:
+    app: echo
 ---
-apiVersion: rafay.io/v1alpha5
-availabilityZones:
-- us-west-2a
-- us-west-2b
-kind: ClusterConfig
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: aws-cluster-1
-  region: us-west-2
-  tags:
-    owner: ki
-    project: presales
-  version: "1.21"
-nodeGroups:
-- amiFamily: AmazonLinux2
-  desiredCapacity: 2
-  iam:
-    withAddonPolicies:
-      imageBuilder: true
-  instanceType: t3.xlarge
-  maxSize: 3
-  name: aws-ng1-c1
-  tags:
-    group: presales
-    owner: ki
-  version: "1.21"
-  volumeSize: 80
-  volumeType: gp3
-vpc:
-  cidr: 192.168.0.0/16
-  clusterEndpoints:
-    privateAccess: true
-    publicAccess: false
-  nat:
-    gateway: Single
+  name: echo
+spec:
+  selector:
+    matchLabels:
+      app: echo
+  strategy:
+    type: Recreate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: echo
+        version: "1.0"
+    spec:
+      containers:
+      - name: echo
+        image: hashicorp/http-echo
+        args:
+        - "-text=Prod"
+        ports:
+        - containerPort: 5678
