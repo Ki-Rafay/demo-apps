@@ -539,7 +539,7 @@ service:
   ## @param service.loadBalancerIP LoadBalancer service IP address
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
-  loadBalancerIP: ""
+  loadBalancerIP: "104.154.109.191"
   ## @param service.loadBalancerSourceRanges NGINX service Load Balancer sources
   ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
   ## e.g:
